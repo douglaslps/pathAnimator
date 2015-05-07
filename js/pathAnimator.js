@@ -23,7 +23,7 @@ PathAnimator.prototype = {
 		(function calc(){
 			var p = [], angle, 
 				now = new Date(),
-				elapsed = (now-startTime)/1000,
+				elapsed = (now-startTime)*3,
 				t = (elapsed/duration), 
 				percent = t * 100;
 				

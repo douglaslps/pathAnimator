@@ -11,7 +11,7 @@
 		this.pathAnimator = new PathAnimator( path );
 		this.walker = walker;
 		this.reverse = false;
-		this.speed = 30;
+		this.speed = 60885;
 		this.easing = '';
 		this.startOffset = null;
 		this.color = 'deeppink'; // visually separate different walkers easily
@@ -53,6 +53,7 @@
 
 	// start "animating" the first Walker on the page
 	generateWalker(firstWalkerObj).start();
+	walkers[0].pathAnimator.stop();
 	// bind the first Controller to the first Walker
 	var firstController = $('menu > div:first');
 	resetController( firstController );
@@ -71,6 +72,7 @@
 		.on('change', 'select', changeEasing);
 		
 	$('.speed').trigger('change');
+	$('.stopPlayRace').on('click', stopPlayRace);
 	
 	// show / hide the path of the animated object
 	function togglePath(){
@@ -85,7 +87,7 @@
 			newAnimatedWalker = generateWalker(newWalker),
 			color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
 		
-		resetController( controllerClone );
+		//resetController( controllerClone );
 		controllerTemplate.after( controllerClone.css('borderColor', color) );
 		
 		$(firstWalkerObj).after(newWalker);
@@ -96,11 +98,17 @@
 	}
 	// reset the controller box for new "walker" instances
 	function resetController(obj){
-		var speed = 30;
+		var speed = 60885;
 		obj.find('.speed').val(speed).next().text(speed + 's');
 		obj.find(':checkbox').removeAttr('checked');
 	}
 	
+	function stopPlayRace(){
+		for (var i = 0; i < walkers.length; i++) {
+			walkers[i].pathAnimator.running ? walkers[i].pathAnimator.stop() : walkers[i].resume.apply(walkers[i]);
+		}
+	}
+
 	// pause or place the animated object along the path 
 	function stopPlay(){
 		var thisAnimatedWalker = $(this.parentNode.parentNode).data('walker');
@@ -151,5 +159,9 @@
 	
 	// reset checkboxes
 	$(':checkbox').removeAttr('checked');
-	$('select').prop('selectedIndex', 0);
+	//$('select').prop('selectedIndex', 0);
+	addWalker();
+	walkers[1].pathAnimator.stop();
+	addWalker();
+	walkers[2].pathAnimator.stop();
 })();
